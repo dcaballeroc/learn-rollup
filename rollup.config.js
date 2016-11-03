@@ -1,9 +1,16 @@
 import babel from 'rollup-plugin-babel';
 import commonjs from 'rollup-plugin-commonjs';
 import eslint from 'rollup-plugin-eslint';
+import postcss from 'rollup-plugin-postcss';
 import replace from 'rollup-plugin-replace';
 import resolve from 'rollup-plugin-node-resolve';
 import uglify from 'rollup-plugin-uglify';
+
+// PostCSS plugins
+import cssnano from 'cssnano';
+import cssnext from 'postcss-cssnext';
+import nested from 'postcss-nested';
+import simplevars from 'postcss-simple-vars';
 
 export default {
   entry: 'src/scripts/main.js',
@@ -11,6 +18,15 @@ export default {
   format: 'iife',
   sourceMap: 'inline',
   plugins: [
+    postcss({
+      plugins: [
+        simplevars(),
+        nested(),
+        cssnext({ warnForDuplicates: false }),
+        cssnano(),
+      ],
+      extensions: ['.css'],
+    }),
     resolve({
       jsnext: true,
       main: true,
